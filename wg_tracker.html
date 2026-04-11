@@ -434,7 +434,24 @@ async function apiGet(action){
 }
 async function loadFromSheets(){
   const[lr,er]=await Promise.all([apiGet('getLogs'),apiGet('getCustomEq')]);
-  logs=(lr||[]).filter(r=>r[0]).map(r=>({id:String(r[0]),date:r[1],time:r[2],eqId:r[3],name:r[4],ico:r[5],brand:r[6],muscle:r[7],weight:parseFloat(r[8])||0,reps:parseInt(r[9])||0,sets:parseInt(r[10])||1}));
+  logs=(lr||[]).filter(r=>r[0]).map(r=>{
+    // Fix date: Google Sheets may store as ISO UTC, convert to local YYYY/MM/DD
+    let dateStr=r[1];
+    if(dateStr&&dateStr.includes('T')){
+      const d=new Date(dateStr);
+      const y=d.getFullYear();
+      const m=String(d.getMonth()+1).padStart(2,'0');
+      const day=String(d.getDate()).padStart(2,'0');
+      dateStr=`${y}/${m}/${day}`;
+    }
+    // Fix time similarly
+    let timeStr=r[2];
+    if(timeStr&&timeStr.includes('T')){
+      const d=new Date(timeStr);
+      timeStr=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+    }
+    return {id:String(r[0]),date:dateStr,time:timeStr,eqId:r[3],name:r[4],ico:r[5]||'🏋️',brand:r[6],muscle:r[7],weight:parseFloat(r[8])||0,reps:parseInt(r[9])||0,sets:parseInt(r[10])||1};
+  });
   customEq=(er||[]).filter(r=>r[0]).map(r=>({id:r[0],name:r[1],brand:r[2],muscle:r[3],muscles:JSON.parse(r[4]||'[]'),ico:r[5]||'🏋️'}));
   renderAll();
 }
@@ -442,8 +459,19 @@ async function loadFromSheets(){
 function renderAll(){renderMuscleTabs();renderEqGrid();renderCustomEqGrid();renderToday();renderHistory();renderFreeToday();updateFreeSuggest();}
 
 // ── HELPERS ──
-function todayStr(){return new Date().toLocaleDateString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit'});}
-function timeStr(){return new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});}
+function todayStr(){
+  const d=new Date();
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  return `${y}/${m}/${day}`;
+}
+function timeStr(){
+  const d=new Date();
+  const h=String(d.getHours()).padStart(2,'0');
+  const m=String(d.getMinutes()).padStart(2,'0');
+  return `${h}:${m}`;
+}
 function allEq(){return[...BUILTIN,...customEq];}
 
 // get PR for an eqId or actionId
