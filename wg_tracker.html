@@ -193,10 +193,6 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
   <div class="panel active" id="panel-eq">
     <div class="search-bar">
       <input class="search-inp" id="searchInp" placeholder="🔍 搜尋器材 / 肌群..." oninput="filterEq()">
-      <div class="cam-btn" title="拍照辨識">
-        📷
-        <input type="file" accept="image/*" id="searchCamInput" onchange="handleSearchPhoto(event)">
-      </div>
     </div>
     <div class="mtabs" id="muscleTabs"></div>
     <div class="sec" id="eqCount"></div>
@@ -236,32 +232,27 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
     <div class="log-list" id="freeTodayList"></div>
   </div>
 
-  <!-- ═══ 新增器材（拍照）═══ -->
+  <!-- ═══ 新增器材 ═══ -->
   <div class="panel" id="panel-scan">
-    <div class="sec">拍照辨識新增器材</div>
-    <div class="scan-options">
-      <div class="scan-opt">
-        <input type="file" accept="image/*" capture="environment" id="scanCamera" onchange="handleScanPhoto(event)">
-        <span class="so-ico">📷</span>
-        <div class="so-txt"><strong>當場拍照</strong>直接拍器材</div>
-      </div>
-      <div class="scan-opt">
-        <input type="file" accept="image/*" id="scanGallery" onchange="handleScanPhoto(event)">
-        <span class="so-ico">🖼️</span>
-        <div class="so-txt"><strong>從相簿選</strong>選擇已拍照片</div>
+    <div class="sec">新增器材</div>
+    <!-- 步驟說明 -->
+    <div style="background:var(--s2);border-radius:12px;padding:13px;margin-bottom:12px">
+      <div style="font-size:.78rem;color:var(--acc);font-weight:700;margin-bottom:6px">📸 怎麼新增器材？</div>
+      <div style="font-size:.75rem;color:var(--muted);line-height:1.8">
+        1. 拍照傳給 Claude（claude.ai）<br>
+        2. Claude 輸出固定格式文字<br>
+        3. 複製貼到下方 → 自動加入清單
       </div>
     </div>
-    <img id="scanPreview" style="display:none;width:100%;border-radius:11px;margin-bottom:11px;max-height:180px;object-fit:cover">
-    <div class="loading" id="scanLoading"><div class="spinner"></div><span>AI 辨識中...</span></div>
-    <div class="ai-result" id="aiResult">
-      <div class="ai-badge">✨ AI 辨識結果</div>
-      <div class="ai-name" id="aiName"></div>
-      <div class="ai-meta" id="aiMeta"></div>
-      <div class="chips" id="aiMuscles"></div>
-      <button class="btn btn-p" onclick="confirmAddEq()">＋ 加入器材清單</button>
-      <button class="btn btn-g" onclick="resetScan()">重新選擇</button>
+    <!-- 貼上區 -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+      <div class="sec" style="margin:0">貼上 Claude 輸出的文字</div>
     </div>
-    <div class="sec" style="margin-top:6px">我的自訂器材 <span id="customEqCount" style="color:var(--acc)"></span></div>
+    <textarea id="eqPasteInp" style="width:100%;background:var(--s2);border:1px solid var(--border);border-radius:11px;padding:11px;color:var(--text);font-family:Noto Sans TC,sans-serif;font-size:.82rem;height:150px;outline:none;resize:none;margin-bottom:8px;transition:border-color .2s" 
+      placeholder="貼上格式如下：&#10;&#10;器材名稱：腹部訓練機 (VS-S53P)&#10;品牌：Matrix&#10;肌群分類：核心&#10;訓練肌群：腹直肌、腸骨肌、軀幹屈曲&#10;圖示：🟡" 
+      onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+    <button class="btn btn-p" onclick="parseAndAddEq()" style="margin-bottom:4px">＋ 加入器材清單</button>
+    <div class="sec" style="margin-top:14px">我的自訂器材 <span id="customEqCount" style="color:var(--acc)"></span></div>
     <div class="eq-grid" id="customEqGrid"></div>
   </div>
 
@@ -427,7 +418,7 @@ const BUILTIN=[
 const BRAND_COLOR={'Hammer Strength':'#e8341a','HOIST ROC-IT':'#f5a623','Matrix':'#4a9eff','Free Weight':'#888','Smith Machine':'#bbb','自訂':'#a855f7'};
 const MUSCLES=['全部','胸','背','腿','肩','手臂','核心','有氧','多功能','自訂'];
 
-let logs=[], customEq=[], activeMusc='全部', currentEq=null, currentAction=null, searchQ='', pendingAi=null, freeType='dumbbell';
+let logs=[], customEq=[], activeMusc='全部', currentEq=null, currentAction=null, searchQ='', freeType='dumbbell';
 
 // ── SYNC ──
 function setSyncDot(s){document.getElementById('syncDot').className='sync'+(s?' '+s:'');}
@@ -765,108 +756,32 @@ function renderFreeToday(){
   </div>`).join('');
 }
 
-// ── PHOTO / AI ──
-function handleSearchPhoto(e){
-  const file=e.target.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=async function(ev){
-    showToast('🔍 AI 辨識照片中...');
-    const b64=ev.target.result.split(',')[1];
-    const mime=file.type||'image/jpeg';
-    await searchByPhoto(b64,mime);
+// ── 新增器材（貼上解析）──
+async function parseAndAddEq(){
+  const raw=document.getElementById('eqPasteInp').value.trim();
+  if(!raw){showToast('⚠️ 請貼上 Claude 輸出的文字');return;}
+
+  const lines=raw.split('\n').map(l=>l.trim()).filter(l=>l);
+  const get=(key)=>{
+    const line=lines.find(l=>l.startsWith(key));
+    return line?line.replace(key,'').trim():'';
   };
-  reader.readAsDataURL(file);
-  e.target.value='';
-}
 
-async function searchByPhoto(b64,mime){
-  try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:500,
-        messages:[{role:'user',content:[
-          {type:'image',source:{type:'base64',media_type:mime,data:b64}},
-          {type:'text',text:'這張圖片是什麼健身器材？只回覆器材的中文名稱，例如：「腿推機」「胸推機」「史密斯機」，不要其他文字。'}
-        ]}]
-      })
-    });
-    const data=await resp.json();
-    const name=data.content?.find(b=>b.type==='text')?.text?.trim()||'';
-    if(name){
-      document.getElementById('searchInp').value=name;
-      filterEq();
-      showToast(`🔍 搜尋：${name}`);
-    }else{showToast('⚠️ 辨識失敗，請試文字搜尋');}
-  }catch(e){showToast('⚠️ 網路錯誤');}
-}
+  const name=get('器材名稱：');
+  const brand=get('品牌：');
+  const muscle=get('肌群分類：');
+  const musclesRaw=get('訓練肌群：');
+  const ico=get('圖示：')||'🏋️';
+  const muscles=musclesRaw?musclesRaw.split(/[、,，]/).map(m=>m.trim()).filter(m=>m):[];
 
-function handleScanPhoto(e){
-  const file=e.target.files[0];if(!file)return;
-  const preview=document.getElementById('scanPreview');
-  preview.src=URL.createObjectURL(file);
-  preview.style.display='block';
-  document.getElementById('aiResult').classList.remove('show');
-  document.getElementById('scanLoading').classList.add('show');
-  const reader=new FileReader();
-  reader.onload=async function(ev){
-    await identifyEquipment(ev.target.result.split(',')[1],file.type||'image/jpeg');
-  };
-  reader.readAsDataURL(file);
-  e.target.value='';
-}
+  if(!name){showToast('⚠️ 找不到器材名稱，請確認格式');return;}
 
-async function identifyEquipment(b64,mime){
-  try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:800,
-        messages:[{role:'user',content:[
-          {type:'image',source:{type:'base64',media_type:mime,data:b64}},
-          {type:'text',text:`你是健身器材辨識專家。分析圖片中的健身器材（本體、說明貼紙或局部都可辨識）。回傳 JSON（不加 markdown）：
-{"name":"器材中文名稱","brand":"品牌（HOIST ROC-IT/Hammer Strength/Matrix/Smith Machine/不明）","muscle":"胸/背/腿/肩/手臂/核心/有氧","muscles":["肌群1","肌群2"],"icon":"emoji","description":"20字內說明"}`}
-        ]}]
-      })
-    });
-    const data=await resp.json();
-    document.getElementById('scanLoading').classList.remove('show');
-    const text=data.content?.find(b=>b.type==='text')?.text||'';
-    let result;
-    try{result=JSON.parse(text.replace(/```json|```/g,'').trim());}
-    catch(e){showToast('⚠️ 辨識失敗，請再試一次');return;}
-    pendingAi=result;
-    document.getElementById('aiName').textContent=(result.icon||'🏋️')+' '+result.name;
-    document.getElementById('aiMeta').textContent=`品牌：${result.brand}｜${result.description||''}`;
-    document.getElementById('aiMuscles').innerHTML=(result.muscles||[]).map(m=>`<span class="chip">${m}</span>`).join('');
-    document.getElementById('aiResult').classList.add('show');
-  }catch(err){
-    document.getElementById('scanLoading').classList.remove('show');
-    showToast('⚠️ 網路錯誤，請再試一次');
-  }
-}
-
-async function confirmAddEq(){
-  if(!pendingAi)return;
-  const newEq={id:'custom_'+Date.now(),ico:pendingAi.icon||'🏋️',name:pendingAi.name,brand:pendingAi.brand||'自訂',muscle:pendingAi.muscle||'自訂',muscles:pendingAi.muscles||[]};
+  const newEq={id:'custom_'+Date.now(),ico,name,brand:brand||'自訂',muscle:muscle||'自訂',muscles};
   customEq.push(newEq);
   await apiPost({action:'saveCustomEq',data:newEq});
   renderCustomEqGrid();renderEqGrid();
-  showToast(`✓ 已加入：${newEq.name}`);
-  resetScan();
-}
-
-function resetScan(){
-  document.getElementById('scanPreview').style.display='none';
-  document.getElementById('aiResult').classList.remove('show');
-  document.getElementById('scanLoading').classList.remove('show');
-  document.getElementById('scanCamera').value='';
-  document.getElementById('scanGallery').value='';
-  pendingAi=null;
+  document.getElementById('eqPasteInp').value='';
+  showToast(`✓ 已加入：${name}`);
 }
 
 // ── PUSH / DEL LOG ──
