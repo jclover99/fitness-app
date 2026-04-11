@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>WG Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080c10;--s1:#0f1419;--s2:#161d26;--s3:#1e2733;--acc:#f5a623;--acc2:#e8341a;--blue:#4a9eff;--green:#2ecc71;--purple:#a855f7;--text:#e8edf2;--muted:#5a6a7a;--border:#1e2733}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-serif;display:flex;flex-direction:column;height:100dvh}
+.hdr{background:var(--s1);border-bottom:1px solid var(--border);padding:10px 14px 9px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.logo{font-family:'Barlow Condensed',sans-serif;font-size:1.35rem;font-weight:800;letter-spacing:3px;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-r{display:flex;align-items:center;gap:8px}
+.hdr-date{font-size:.68rem;color:var(--muted)}
+.sync{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0}
+.sync.ok{background:var(--green)}.sync.err{background:var(--acc2)}.sync.ing{background:var(--acc);animation:blink .8s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.scroll{flex:1;overflow-y:auto;padding:11px 11px 4px}
+.scroll::-webkit-scrollbar{width:2px}
+.scroll::-webkit-scrollbar-thumb{background:var(--s3)}
+.nav{display:flex;background:var(--s1);border-top:1px solid var(--border);flex-shrink:0}
+.nav-btn{flex:1;border:none;background:none;color:var(--muted);padding:8px 2px 10px;font-size:.54rem;font-family:'Noto Sans TC',sans-serif;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;transition:color .2s}
+.nav-btn .ico{font-size:1.05rem}
+.nav-btn.active{color:var(--acc)}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .18s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+
+/* PLAN */
+.plan-section{margin-bottom:6px}
+.plan-section-title{font-size:.65rem;color:var(--purple);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;padding:3px 0;border-bottom:1px solid var(--border)}
+.plan-item{background:var(--s2);border-radius:9px;padding:9px 12px;margin-bottom:4px;display:flex;align-items:center;gap:9px;font-size:.8rem;cursor:pointer;transition:border-color .15s;border:1px solid transparent}
+.plan-item:active{border-color:var(--acc)}
+.plan-item.done{opacity:.45}
+.plan-check{width:20px;height:20px;border-radius:50%;border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;transition:all .15s}
+.plan-check.done{background:var(--green);border-color:var(--green);color:#000}
+.plan-item-name{flex:1}
+.plan-item-hint{font-size:.65rem;color:var(--muted)}
+
+/* SEARCH */
+.search-bar{display:flex;gap:8px;margin-bottom:10px}
+.search-inp{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:11px;padding:10px 12px;color:var(--text);font-family:'Noto Sans TC',sans-serif;font-size:.85rem;outline:none;transition:border-color .2s}
+.search-inp:focus{border-color:var(--acc)}
+.cam-btn{background:var(--s2);border:1px solid var(--border);border-radius:11px;padding:10px 13px;cursor:pointer;font-size:1.1rem;position:relative;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.cam-btn input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0}
+
+/* TABS */
+.mtabs{display:flex;gap:5px;overflow-x:auto;margin-bottom:10px;padding-bottom:2px}
+.mtabs::-webkit-scrollbar{display:none}
+.mtab{flex-shrink:0;background:var(--s2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:.7rem;cursor:pointer;transition:all .15s;white-space:nowrap;color:var(--text)}
+.mtab.active{background:var(--acc);border-color:var(--acc);color:#000;font-weight:700}
+
+/* EQ CARDS */
+.eq-grid{display:flex;flex-direction:column;gap:7px}
+.eq-card{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:12px 13px;display:flex;align-items:center;gap:11px;cursor:pointer;transition:border-color .15s}
+.eq-card:active{border-color:var(--acc)}
+.eq-ico{font-size:1.4rem;width:34px;text-align:center;flex-shrink:0}
+.eq-info{flex:1;min-width:0}
+.eq-name{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:700;letter-spacing:.5px}
+.eq-brand{font-size:.6rem;margin-top:1px}
+.eq-muscles{font-size:.64rem;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.eq-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.eq-badge{background:var(--acc);color:#000;font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:10px;font-family:'Barlow Condensed',sans-serif}
+.eq-pr{font-size:.6rem;color:var(--green)}
+.eq-arrow{color:var(--muted);font-size:.75rem}
+
+/* FORMS */
+.sec{font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;margin-top:2px}
+.form-box{background:var(--s2);border-radius:12px;padding:12px;margin-bottom:10px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px}
+.inp-g{display:flex;flex-direction:column;gap:3px}
+.inp-l{font-size:.6rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.inp{background:var(--s3);border:1px solid var(--border);border-radius:9px;padding:10px 11px;color:var(--text);font-family:'Noto Sans TC',sans-serif;font-size:.9rem;outline:none;width:100%;transition:border-color .2s}
+.inp:focus{border-color:var(--acc)}
+.inp-last-val{font-size:.65rem;color:var(--acc);margin-top:2px;min-height:14px;transition:color .2s}
+
+/* BUTTONS */
+.btn{width:100%;padding:12px;border:none;border-radius:11px;font-family:'Noto Sans TC',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;transition:opacity .15s,transform .1s;margin-top:4px}
+.btn:active{transform:scale(.97);opacity:.85}
+.btn-p{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff}
+.btn-g{background:var(--s3);color:var(--muted)}
+.btn-b{background:rgba(74,158,255,.15);border:1px solid rgba(74,158,255,.3);color:var(--blue)}
+
+/* STATS */
+.stats-row{display:flex;gap:7px;margin-bottom:11px}
+.stat{flex:1;background:var(--s1);border-radius:10px;padding:10px;text-align:center}
+.stat-v{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:700;color:var(--acc);line-height:1}
+.stat-l{font-size:.56rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+/* LOG LIST */
+.log-list{display:flex;flex-direction:column;gap:6px}
+.log-item{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:9px;animation:fadeIn .2s}
+.li-ico{font-size:1.1rem;width:28px;text-align:center;flex-shrink:0}
+.li-info{flex:1;min-width:0}
+.li-name{font-size:.82rem;font-weight:500}
+.li-meta{font-size:.65rem;color:var(--muted);margin-top:1px}
+.li-val{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;color:var(--acc);text-align:right;flex-shrink:0;line-height:1.4}
+.li-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.82rem;padding:4px;flex-shrink:0}
+
+/* PREV LOGS */
+.prev-logs{max-height:150px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;margin-top:7px}
+.prev-row{display:flex;justify-content:space-between;align-items:center;background:var(--s2);border-radius:7px;padding:7px 10px;font-size:.75rem}
+.prev-l{color:var(--muted)}
+.prev-r{font-family:'Barlow Condensed',sans-serif;font-size:1rem;color:var(--acc)}
+.prev-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.78rem;padding:2px 4px}
+.pr-badge{background:rgba(46,204,113,.15);border:1px solid rgba(46,204,113,.3);color:var(--green);font-size:.6rem;padding:2px 7px;border-radius:10px;margin-left:6px}
+
+/* HISTORY */
+.hist-day{margin-bottom:14px}
+.hist-date{font-size:.63rem;color:var(--acc);letter-spacing:2px;text-transform:uppercase;padding-bottom:5px;border-bottom:1px solid var(--border);margin-bottom:7px}
+.hist-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.78rem}
+.hist-row:last-child{border:none}
+.hist-l{color:var(--muted);display:flex;align-items:center;gap:6px}
+.hist-r{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;color:var(--acc2)}
+
+/* OVERLAY / MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.87);z-index:500;display:none;align-items:flex-end}
+.overlay.open{display:flex}
+.modal{background:var(--s1);width:100%;border-radius:20px 20px 0 0;padding:18px 14px 30px;max-height:90vh;overflow-y:auto;animation:slideUp .26s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:1px}
+.modal-close{background:var(--s3);border:none;color:var(--muted);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center}
+.modal-sub{font-size:.65rem;margin-bottom:4px}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
+.chip{background:rgba(74,158,255,.12);border:1px solid rgba(74,158,255,.25);color:var(--blue);font-size:.64rem;padding:3px 8px;border-radius:20px}
+
+/* ACTION SELECTOR (multi-action equipment) */
+.action-sel{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.action-opt{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:10px 13px;cursor:pointer;transition:border-color .15s;display:flex;align-items:center;justify-content:space-between}
+.action-opt:active,.action-opt.selected{border-color:var(--acc)}
+.action-opt.selected{background:rgba(245,166,35,.08)}
+.action-opt-name{font-size:.85rem;font-weight:500}
+.action-opt-muscles{font-size:.65rem;color:var(--muted);margin-top:2px}
+.action-opt-pr{font-size:.65rem;color:var(--green)}
+
+/* FREE ENTRY (dumbbell/barbell/kettlebell) */
+.free-tabs{display:flex;gap:6px;margin-bottom:12px}
+.free-tab{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:9px;text-align:center;cursor:pointer;font-size:.78rem;transition:all .15s}
+.free-tab.active{background:var(--acc);border-color:var(--acc);color:#000;font-weight:700}
+
+/* SCAN */
+.scan-options{display:flex;gap:8px;margin-bottom:12px}
+.scan-opt{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:16px 10px;text-align:center;cursor:pointer;position:relative;transition:border-color .15s}
+.scan-opt:active{border-color:var(--acc)}
+.scan-opt input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0}
+.scan-opt .so-ico{font-size:1.6rem;display:block;margin-bottom:5px}
+.scan-opt .so-txt{font-size:.72rem;color:var(--muted)}
+.scan-opt .so-txt strong{color:var(--acc);display:block;font-size:.78rem;margin-bottom:2px}
+.ai-result{background:var(--s2);border:1px solid var(--acc);border-radius:13px;padding:13px;margin-bottom:11px;display:none}
+.ai-result.show{display:block;animation:fadeIn .3s ease}
+.ai-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:20px;padding:3px 9px;font-size:.62rem;color:var(--acc);margin-bottom:7px}
+.ai-name{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:1px;margin-bottom:3px}
+.ai-meta{font-size:.72rem;color:var(--muted);margin-bottom:9px;line-height:1.6}
+.loading{display:none;flex-direction:column;align-items:center;gap:9px;padding:22px;color:var(--muted);font-size:.78rem}
+.loading.show{display:flex}
+.spinner{width:28px;height:28px;border:3px solid var(--s3);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* PLAN */
+.plan-day{margin-bottom:14px}
+.plan-day-hdr{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;color:var(--acc);letter-spacing:1px;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between}
+.plan-item{background:var(--s2);border-radius:9px;padding:9px 12px;margin-bottom:5px;display:flex;align-items:center;gap:9px;font-size:.8rem}
+.plan-done{text-decoration:line-through;opacity:.4}
+.plan-check{width:20px;height:20px;border-radius:50%;border:1px solid var(--border);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.7rem}
+.plan-check.done{background:var(--green);border-color:var(--green);color:#000}
+.plan-add{background:none;border:1px dashed var(--border);border-radius:9px;padding:9px;width:100%;color:var(--muted);font-size:.78rem;cursor:pointer;margin-top:4px}
+
+/* TOAST */
+.toast{position:fixed;bottom:66px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--green);color:#000;font-size:.76rem;font-weight:700;padding:8px 15px;border-radius:20px;opacity:0;transition:all .25s;z-index:999;white-space:nowrap;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.empty{text-align:center;padding:28px 14px;color:var(--muted);font-size:.8rem;line-height:2}
+.empty-ico{font-size:2.2rem;display:block;margin-bottom:7px}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="hdr">
+  <div><div class="logo">💪 WG TRACKER</div></div>
+  <div class="hdr-r">
+    <div class="hdr-date" id="hdrDate"></div>
+    <div class="sync" id="syncDot"></div>
+  </div>
+</div>
+
+<div class="scroll" id="mainScroll">
+
+  <!-- ═══ 器材 ═══ -->
+  <div class="panel active" id="panel-eq">
+    <div class="search-bar">
+      <input class="search-inp" id="searchInp" placeholder="🔍 搜尋器材 / 肌群..." oninput="filterEq()">
+      <div class="cam-btn" title="拍照辨識">
+        📷
+        <input type="file" accept="image/*" id="searchCamInput" onchange="handleSearchPhoto(event)">
+      </div>
+    </div>
+    <div class="mtabs" id="muscleTabs"></div>
+    <div class="sec" id="eqCount"></div>
+    <div class="eq-grid" id="eqGrid"></div>
+  </div>
+
+  <!-- ═══ 自由重量 ═══ -->
+  <div class="panel" id="panel-free">
+    <div class="free-tabs">
+      <div class="free-tab active" onclick="setFreeType('dumbbell',this)">🔵 啞鈴</div>
+      <div class="free-tab" onclick="setFreeType('barbell',this)">⚫ 槓鈴</div>
+      <div class="free-tab" onclick="setFreeType('kettlebell',this)">🟤 壺鈴</div>
+    </div>
+    <div class="sec">動作名稱</div>
+    <input class="inp" id="freeName" placeholder="例：彎舉、臥推、硬舉..." list="freeSuggest" autocomplete="off" style="margin-bottom:8px">
+    <datalist id="freeSuggest"></datalist>
+    <div class="form-box">
+      <div class="form-row">
+        <div class="inp-g">
+          <span class="inp-l">重量 (kg)</span>
+          <input class="inp" type="number" id="freeWeight" placeholder="kg" min="0" step="2.5">
+          <span class="inp-last-val" id="freeLastWeight"></span>
+        </div>
+        <div class="inp-g">
+          <span class="inp-l">次數</span>
+          <input class="inp" type="number" id="freeReps" placeholder="12" min="1">
+          <span class="inp-last-val" id="freeLastReps"></span>
+        </div>
+      </div>
+      <div class="inp-g" style="margin-bottom:10px">
+        <span class="inp-l">組數</span>
+        <input class="inp" type="number" id="freeSets" placeholder="3" min="1" value="3">
+      </div>
+      <button class="btn btn-p" onclick="saveFreeLog()">✓ 記錄這組</button>
+    </div>
+    <div class="sec">今日記錄</div>
+    <div class="log-list" id="freeTodayList"></div>
+  </div>
+
+  <!-- ═══ 新增器材（拍照）═══ -->
+  <div class="panel" id="panel-scan">
+    <div class="sec">拍照辨識新增器材</div>
+    <div class="scan-options">
+      <div class="scan-opt">
+        <input type="file" accept="image/*" capture="environment" id="scanCamera" onchange="handleScanPhoto(event)">
+        <span class="so-ico">📷</span>
+        <div class="so-txt"><strong>當場拍照</strong>直接拍器材</div>
+      </div>
+      <div class="scan-opt">
+        <input type="file" accept="image/*" id="scanGallery" onchange="handleScanPhoto(event)">
+        <span class="so-ico">🖼️</span>
+        <div class="so-txt"><strong>從相簿選</strong>選擇已拍照片</div>
+      </div>
+    </div>
+    <img id="scanPreview" style="display:none;width:100%;border-radius:11px;margin-bottom:11px;max-height:180px;object-fit:cover">
+    <div class="loading" id="scanLoading"><div class="spinner"></div><span>AI 辨識中...</span></div>
+    <div class="ai-result" id="aiResult">
+      <div class="ai-badge">✨ AI 辨識結果</div>
+      <div class="ai-name" id="aiName"></div>
+      <div class="ai-meta" id="aiMeta"></div>
+      <div class="chips" id="aiMuscles"></div>
+      <button class="btn btn-p" onclick="confirmAddEq()">＋ 加入器材清單</button>
+      <button class="btn btn-g" onclick="resetScan()">重新選擇</button>
+    </div>
+    <div class="sec" style="margin-top:6px">我的自訂器材 <span id="customEqCount" style="color:var(--acc)"></span></div>
+    <div class="eq-grid" id="customEqGrid"></div>
+  </div>
+
+  <!-- ═══ 今日 ═══ -->
+  <div class="panel" id="panel-today">
+    <div class="stats-row">
+      <div class="stat"><div class="stat-v" id="tSets">0</div><div class="stat-l">組數</div></div>
+      <div class="stat"><div class="stat-v" id="tKinds">0</div><div class="stat-l">種類</div></div>
+      <div class="stat"><div class="stat-v" id="tVol">0</div><div class="stat-l">總次數</div></div>
+    </div>
+    <!-- 課表區 -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+      <div class="sec" style="margin:0">今日課表</div>
+      <div style="display:flex;gap:6px">
+        <button onclick="showPastePlan()" style="background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:5px 10px;color:var(--acc);font-size:.72rem;cursor:pointer">📋 貼上課表</button>
+        <button onclick="clearPlan()" style="background:none;border:none;color:var(--muted);font-size:.72rem;cursor:pointer">清除</button>
+      </div>
+    </div>
+    <div id="planArea"></div>
+    <!-- 貼上框 -->
+    <div id="pasteBox" style="display:none;margin-bottom:10px">
+      <textarea id="planPasteInp" style="width:100%;background:var(--s2);border:1px solid var(--acc);border-radius:10px;padding:10px;color:var(--text);font-family:Noto Sans TC,sans-serif;font-size:.82rem;height:140px;outline:none;resize:none" placeholder="從 Cowork 複製課表文字貼在這裡...&#10;&#10;例：&#10;今天練背＋核心&#10;&#10;背部：&#10;滑輪下拉&#10;坐姿划船"></textarea>
+      <div style="display:flex;gap:7px;margin-top:7px">
+        <button onclick="parsePlan()" style="flex:2;background:linear-gradient(135deg,var(--acc),var(--acc2));border:none;border-radius:9px;padding:11px;color:#fff;font-weight:700;font-size:.82rem;cursor:pointer">✓ 匯入課表</button>
+        <button onclick="hidePastePlan()" style="flex:1;background:var(--s3);border:none;border-radius:9px;padding:11px;color:var(--muted);font-size:.82rem;cursor:pointer">取消</button>
+      </div>
+    </div>
+    <div class="sec" style="margin-top:8px">訓練記錄</div>
+    <div class="log-list" id="todayList"></div>
+  </div>
+
+  <!-- ═══ 歷史 ═══ -->
+  <div class="panel" id="panel-hist">
+    <div id="histContainer"></div>
+  </div>
+
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="switchTab('eq')"><span class="ico">🏋️</span>器材</button>
+  <button class="nav-btn" onclick="switchTab('free')"><span class="ico">🔵</span>自由重量</button>
+  <button class="nav-btn" onclick="switchTab('scan')"><span class="ico">📸</span>新增</button>
+  <button class="nav-btn" onclick="switchTab('today')"><span class="ico">📋</span>今日</button>
+  <button class="nav-btn" onclick="switchTab('hist')"><span class="ico">📅</span>歷史</button>
+</div>
+
+<!-- LOG MODAL -->
+<div class="overlay" id="overlay" onclick="closeOverlay(event)">
+  <div class="modal" id="modal">
+    <div class="modal-hdr">
+      <div>
+        <div class="modal-sub" id="mBrand"></div>
+        <div class="modal-title" id="mTitle"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="chips" id="mMuscles"></div>
+    <!-- action selector for multi-action equipment -->
+    <div id="actionSel" style="display:none">
+      <div class="sec">選擇動作</div>
+      <div class="action-sel" id="actionList"></div>
+    </div>
+    <!-- log form -->
+    <div id="logFormWrap">
+      <div class="form-box">
+        <div class="form-row">
+          <div class="inp-g">
+            <span class="inp-l">重量 (kg)</span>
+            <input class="inp" type="number" id="fWeight" placeholder="kg" min="0" step="2.5">
+            <span class="inp-last-val" id="lastWeight"></span>
+          </div>
+          <div class="inp-g">
+            <span class="inp-l">次數</span>
+            <input class="inp" type="number" id="fReps" placeholder="12" min="1">
+            <span class="inp-last-val" id="lastReps"></span>
+          </div>
+        </div>
+        <div class="inp-g" style="margin-bottom:10px">
+          <span class="inp-l">組數</span>
+          <input class="inp" type="number" id="fSets" placeholder="3" min="1" value="3">
+        </div>
+        <button class="btn btn-p" onclick="saveLog()">✓ 記錄這組</button>
+      </div>
+      <div class="sec">最近記錄 <span id="prBadge"></span></div>
+      <div class="prev-logs" id="prevLogs"></div>
+      <!-- progress chart -->
+      <div id="chartWrap" style="display:none;margin-top:12px">
+        <div class="sec">進步折線圖 📈</div>
+        <div style="background:var(--s2);border-radius:11px;padding:12px;position:relative;height:160px">
+          <canvas id="progressChart"></canvas>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-g" onclick="closeModal()" style="margin-top:10px">關閉</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API='https://script.google.com/macros/s/AKfycbwDDNjws3JBqc3yzlqA5af3DxPWhVV9kn5F7KpsUHnZP14nupKh-bDiPLS4v0hLn7yW/exec';
+
+// ══ EQUIPMENT DATABASE ══
+const BUILTIN=[
+  // 胸
+  {id:'hs_chest_press',ico:'🔴',name:'胸推機',brand:'Hammer Strength',muscle:'胸',muscles:['胸大肌','三頭肌','前三角']},
+  {id:'hs_incline',ico:'🔴',name:'上斜胸推機',brand:'Hammer Strength',muscle:'胸',muscles:['上胸','三頭肌']},
+  {id:'hs_decline',ico:'🔴',name:'下斜胸推機',brand:'Hammer Strength',muscle:'胸',muscles:['下胸','三頭肌']},
+  {id:'hs_fly',ico:'🔴',name:'蝴蝶夾胸機',brand:'Hammer Strength',muscle:'胸',muscles:['胸大肌']},
+  {id:'mx_cable_fly',ico:'🟡',name:'滑輪夾胸',brand:'Matrix',muscle:'胸',muscles:['胸大肌','前三角']},
+  {id:'fw_bench',ico:'⚪',name:'槓鈴臥推',brand:'Free Weight',muscle:'胸',muscles:['胸大肌','三頭肌','前三角']},
+  {id:'mx_g3s22_fly',ico:'🟡',name:'蝴蝶夾胸 (G3-S22)',brand:'Matrix',muscle:'胸',muscles:['胸大肌','前三角']},
+  // 史密斯多功能
+  {id:'smith',ico:'⚫',name:'史密斯機',brand:'Smith Machine',muscle:'多功能',muscles:['多部位'],
+   actions:[
+    {id:'smith_bench',name:'平胸臥推',muscles:['胸大肌','三頭肌','前三角'],muscle:'胸'},
+    {id:'smith_incline',name:'上斜臥推',muscles:['上胸','三頭肌'],muscle:'胸'},
+    {id:'smith_squat',name:'深蹲',muscles:['股四頭','臀大肌','腿後腱'],muscle:'腿'},
+    {id:'smith_rdl',name:'羅馬尼亞硬舉',muscles:['臀大肌','腿後腱','豎脊肌'],muscle:'腿'},
+    {id:'smith_hip_thrust',name:'臀推',muscles:['臀大肌','腿後腱'],muscle:'腿'},
+    {id:'smith_lunge',name:'弓箭步',muscles:['股四頭','臀大肌'],muscle:'腿'},
+  ]},
+  // 背
+  {id:'hs_row',ico:'🔴',name:'單邊坐姿划船',brand:'Hammer Strength',muscle:'背',muscles:['背闊肌','菱形肌','後三角']},
+  {id:'hs_pulldown',ico:'🔴',name:'下拉機',brand:'Hammer Strength',muscle:'背',muscles:['背闊肌','二頭肌']},
+  {id:'hs_seated_row',ico:'🔴',name:'坐姿划船機',brand:'Hammer Strength',muscle:'背',muscles:['中背','菱形肌']},
+  {id:'mx_lat_pull',ico:'🟡',name:'滑輪下拉',brand:'Matrix',muscle:'背',muscles:['背闊肌','二頭肌']},
+  {id:'mx_cable_row',ico:'🟡',name:'滑輪坐姿划船',brand:'Matrix',muscle:'背',muscles:['中背','菱形肌']},
+  {id:'fw_deadlift',ico:'⚪',name:'硬舉',brand:'Free Weight',muscle:'背',muscles:['豎脊肌','臀大肌','腿後腱']},
+  {id:'fw_pullup',ico:'⚪',name:'引體向上',brand:'Free Weight',muscle:'背',muscles:['背闊肌','二頭肌']},
+  // 腿
+  {id:'hi_outer_thigh',ico:'🟠',name:'大腿外展機 (W101)',brand:'HOIST ROC-IT',muscle:'腿',muscles:['臀中肌','臀小肌']},
+  {id:'hi_inner_thigh',ico:'🟠',name:'大腿內收機',brand:'HOIST ROC-IT',muscle:'腿',muscles:['內收肌群']},
+  {id:'hi_leg_press',ico:'🟠',name:'腿推機',brand:'HOIST ROC-IT',muscle:'腿',muscles:['股四頭','臀大肌','腿後腱']},
+  {id:'hi_leg_ext',ico:'🟠',name:'腿伸展機',brand:'HOIST ROC-IT',muscle:'腿',muscles:['股四頭']},
+  {id:'hi_leg_curl',ico:'🟠',name:'腿彎舉機',brand:'HOIST ROC-IT',muscle:'腿',muscles:['腿後腱']},
+  {id:'hi_hip_thrust',ico:'🟠',name:'臀推機 (Booty)',brand:'HOIST ROC-IT',muscle:'腿',muscles:['臀大肌','腿後腱']},
+  {id:'mx_calf',ico:'🟡',name:'提踵機',brand:'Matrix',muscle:'腿',muscles:['腓腸肌','比目魚肌']},
+  {id:'fw_squat',ico:'⚪',name:'深蹲',brand:'Free Weight',muscle:'腿',muscles:['股四頭','臀大肌','腿後腱']},
+  {id:'fw_lunge',ico:'⚪',name:'弓箭步',brand:'Free Weight',muscle:'腿',muscles:['股四頭','臀大肌']},
+  // 肩
+  {id:'hs_shoulder',ico:'🔴',name:'肩推機',brand:'Hammer Strength',muscle:'肩',muscles:['三角肌','三頭肌']},
+  {id:'hs_lateral',ico:'🔴',name:'側平舉機',brand:'Hammer Strength',muscle:'肩',muscles:['側三角']},
+  {id:'mx_g3s22_rear',ico:'🟡',name:'後三角飛鳥 (G3-S22)',brand:'Matrix',muscle:'肩',muscles:['後三角肌','菱形肌']},
+  {id:'fw_ohp',ico:'⚪',name:'站姿肩推',brand:'Free Weight',muscle:'肩',muscles:['三角肌','三頭肌']},
+  // 手臂
+  {id:'hs_bicep',ico:'🔴',name:'二頭彎舉機',brand:'Hammer Strength',muscle:'手臂',muscles:['肱二頭肌']},
+  {id:'hs_tricep',ico:'🔴',name:'三頭伸展機',brand:'Hammer Strength',muscle:'手臂',muscles:['肱三頭肌']},
+  {id:'mx_cable_curl',ico:'🟡',name:'滑輪二頭彎舉',brand:'Matrix',muscle:'手臂',muscles:['肱二頭肌']},
+  {id:'mx_tricep',ico:'🟡',name:'滑輪三頭下壓',brand:'Matrix',muscle:'手臂',muscles:['肱三頭肌']},
+  // 核心
+  {id:'mx_crunch',ico:'🟡',name:'捲腹機',brand:'Matrix',muscle:'核心',muscles:['腹直肌']},
+  {id:'mx_vs_s53p',ico:'🟡',name:'腹部訓練機 (VS-S53P)',brand:'Matrix',muscle:'核心',muscles:['腹直肌','腸骨肌']},
+  {id:'fw_plank',ico:'⚪',name:'平板支撐',brand:'Free Weight',muscle:'核心',muscles:['核心全部']},
+  // 有氧
+  {id:'mx_treadmill',ico:'🟢',name:'跑步機',brand:'Matrix',muscle:'有氧',muscles:['全身心肺']},
+  {id:'mx_bike',ico:'🟢',name:'飛輪腳踏車',brand:'Matrix',muscle:'有氧',muscles:['下肢心肺']},
+  {id:'mx_elliptical',ico:'🟢',name:'橢圓機',brand:'Matrix',muscle:'有氧',muscles:['全身心肺']},
+  {id:'mx_stairmaster',ico:'🟢',name:'登階機 StairMaster',brand:'Matrix',muscle:'有氧',muscles:['臀腿心肺']},
+  {id:'mx_row',ico:'🟢',name:'划船機',brand:'Matrix',muscle:'有氧',muscles:['全身心肺']},
+];
+
+const BRAND_COLOR={'Hammer Strength':'#e8341a','HOIST ROC-IT':'#f5a623','Matrix':'#4a9eff','Free Weight':'#888','Smith Machine':'#bbb','自訂':'#a855f7'};
+const MUSCLES=['全部','胸','背','腿','肩','手臂','核心','有氧','多功能','自訂'];
+
+let logs=[], customEq=[], activeMusc='全部', currentEq=null, currentAction=null, searchQ='', pendingAi=null, freeType='dumbbell';
+
+// ── SYNC ──
+function setSyncDot(s){document.getElementById('syncDot').className='sync'+(s?' '+s:'');}
+async function apiPost(body){
+  setSyncDot('ing');
+  try{await fetch(API,{method:'POST',body:JSON.stringify(body)});setSyncDot('ok');}
+  catch(e){setSyncDot('err');}
+}
+async function apiGet(action){
+  setSyncDot('ing');
+  try{const r=await fetch(API+'?action='+action);const d=await r.json();setSyncDot('ok');return d;}
+  catch(e){setSyncDot('err');return [];}
+}
+async function loadFromSheets(){
+  const[lr,er]=await Promise.all([apiGet('getLogs'),apiGet('getCustomEq')]);
+  logs=(lr||[]).filter(r=>r[0]).map(r=>({id:String(r[0]),date:r[1],time:r[2],eqId:r[3],name:r[4],ico:r[5],brand:r[6],muscle:r[7],weight:parseFloat(r[8])||0,reps:parseInt(r[9])||0,sets:parseInt(r[10])||1}));
+  customEq=(er||[]).filter(r=>r[0]).map(r=>({id:r[0],name:r[1],brand:r[2],muscle:r[3],muscles:JSON.parse(r[4]||'[]'),ico:r[5]||'🏋️'}));
+  renderAll();
+}
+
+function renderAll(){renderMuscleTabs();renderEqGrid();renderCustomEqGrid();renderToday();renderHistory();renderFreeToday();updateFreeSuggest();}
+
+// ── HELPERS ──
+function todayStr(){return new Date().toLocaleDateString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit'});}
+function timeStr(){return new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});}
+function allEq(){return[...BUILTIN,...customEq];}
+
+// get PR for an eqId or actionId
+function getPR(id){
+  const myLogs=logs.filter(l=>l.eqId===id&&l.weight>0);
+  if(!myLogs.length)return null;
+  return Math.max(...myLogs.map(l=>l.weight));
+}
+// get last log for id
+function getLastLog(id){
+  const myLogs=logs.filter(l=>l.eqId===id);
+  return myLogs.length?myLogs[myLogs.length-1]:null;
+}
+
+// ── MUSCLE TABS ──
+function renderMuscleTabs(){
+  document.getElementById('muscleTabs').innerHTML=MUSCLES.map(m=>
+    `<button class="mtab${m===activeMusc?' active':''}" onclick="setMusc('${m}')">${m}</button>`
+  ).join('');
+}
+function setMusc(m){activeMusc=m;searchQ='';document.getElementById('searchInp').value='';renderMuscleTabs();renderEqGrid();}
+function filterEq(){searchQ=document.getElementById('searchInp').value.trim();activeMusc='全部';renderMuscleTabs();renderEqGrid();}
+
+// ── EQ GRID ──
+function renderEqGrid(){
+  let list=allEq();
+  if(activeMusc==='自訂')list=customEq;
+  else if(activeMusc!=='全部')list=list.filter(e=>e.muscle===activeMusc);
+  if(searchQ){
+    const q=searchQ.toLowerCase();
+    list=list.filter(e=>e.name.includes(searchQ)||e.muscles.join('').includes(searchQ)||(e.actions||[]).some(a=>a.name.includes(searchQ)||a.muscles.join('').includes(searchQ)));
+  }
+  document.getElementById('eqCount').textContent=`${list.length} 台器材`;
+  const today=todayStr();
+  document.getElementById('eqGrid').innerHTML=list.length===0
+    ?`<div class="empty"><span class="empty-ico">🔍</span>找不到器材</div>`
+    :list.map(eq=>{
+      // count today logs — for multi-action, sum all actions
+      const ids=eq.actions?eq.actions.map(a=>a.id):[eq.id];
+      const todayCount=logs.filter(l=>ids.includes(l.eqId)&&l.date===today).length;
+      const badge=todayCount>0?`<span class="eq-badge">${todayCount}組</span>`:'';
+      const pr=getPR(eq.id);
+      const prTxt=pr?`<span class="eq-pr">PR ${pr}kg</span>`:'';
+      const col=BRAND_COLOR[eq.brand]||'#888';
+      const multiTag=eq.actions?`<span style="font-size:.6rem;color:var(--purple);margin-left:4px">多功能</span>`:'';
+      return`<div class="eq-card" onclick="openModal('${eq.id}')">
+        <div class="eq-ico">${eq.ico}</div>
+        <div class="eq-info">
+          <div class="eq-name">${eq.name}${multiTag}</div>
+          <div class="eq-brand" style="color:${col}">${eq.brand}</div>
+          <div class="eq-muscles">${eq.actions?eq.actions.map(a=>a.name).join(' · '):eq.muscles.join(' · ')}</div>
+        </div>
+        <div class="eq-right">${badge}${prTxt}<div class="eq-arrow">›</div></div>
+      </div>`;
+    }).join('');
+}
+
+// ── CUSTOM EQ ──
+function renderCustomEqGrid(){
+  const el=document.getElementById('customEqGrid');
+  document.getElementById('customEqCount').textContent=customEq.length?`(${customEq.length})`:'' ;
+  if(!customEq.length){el.innerHTML=`<div class="empty"><span class="empty-ico">📷</span>還沒有自訂器材<br>拍照讓 AI 辨識加入</div>`;return;}
+  const today=todayStr();
+  el.innerHTML=customEq.map(eq=>{
+    const n=logs.filter(l=>l.eqId===eq.id&&l.date===today).length;
+    const badge=n>0?`<span class="eq-badge">${n}組</span>`:'';
+    return`<div class="eq-card" onclick="openModal('${eq.id}')">
+      <div class="eq-ico">${eq.ico||'🏋️'}</div>
+      <div class="eq-info">
+        <div class="eq-name">${eq.name}</div>
+        <div class="eq-brand" style="color:var(--purple)">${eq.brand||'自訂'}</div>
+        <div class="eq-muscles">${eq.muscles.join(' · ')}</div>
+      </div>
+      <div class="eq-right">${badge}
+        <button onclick="event.stopPropagation();delCustomEq('${eq.id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:.8rem;padding:3px">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+async function delCustomEq(id){
+  customEq=customEq.filter(e=>e.id!==id);
+  await apiPost({action:'deleteCustomEq',id});
+  renderCustomEqGrid();renderEqGrid();
+}
+
+// ── MODAL ──
+function openModal(eqId){
+  currentEq=allEq().find(e=>e.id===eqId);
+  if(!currentEq)return;
+  currentAction=null;
+  document.getElementById('mBrand').textContent=currentEq.brand;
+  document.getElementById('mBrand').style.color=BRAND_COLOR[currentEq.brand]||'#888';
+  document.getElementById('mTitle').textContent=currentEq.name;
+  document.getElementById('mMuscles').innerHTML=currentEq.muscles.map(m=>`<span class="chip">${m}</span>`).join('');
+
+  // multi-action?
+  const asel=document.getElementById('actionSel');
+  const alist=document.getElementById('actionList');
+  if(currentEq.actions&&currentEq.actions.length){
+    asel.style.display='block';
+    document.getElementById('logFormWrap').style.display='none';
+    alist.innerHTML=currentEq.actions.map(a=>{
+      const pr=getPR(a.id);
+      const last=getLastLog(a.id);
+      return`<div class="action-opt" onclick="selectAction('${a.id}')">
+        <div>
+          <div class="action-opt-name">${a.name}</div>
+          <div class="action-opt-muscles">${a.muscles.join(' · ')}</div>
+        </div>
+        <div style="text-align:right">
+          ${pr?`<div class="action-opt-pr">PR ${pr}kg</div>`:''}
+          ${last?`<div style="font-size:.62rem;color:var(--muted)">上次 ${last.weight>0?last.weight+'kg ':''} ${last.reps}次</div>`:''}
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    asel.style.display='none';
+    document.getElementById('logFormWrap').style.display='block';
+    fillLastData(currentEq.id);
+  }
+  document.getElementById('overlay').classList.add('open');
+}
+
+function selectAction(actionId){
+  const action=currentEq.actions.find(a=>a.id===actionId);
+  if(!action)return;
+  currentAction=action;
+  // update chips
+  document.getElementById('mMuscles').innerHTML=action.muscles.map(m=>`<span class="chip">${m}</span>`).join('');
+  document.getElementById('actionSel').style.display='none';
+  document.getElementById('logFormWrap').style.display='block';
+  fillLastData(actionId);
+}
+
+function fillLastData(id){
+  const last=getLastLog(id);
+  const pr=getPR(id);
+
+  // AUTO-FILL last values
+  if(last){
+    document.getElementById('fWeight').value=last.weight>0?last.weight:'';
+    document.getElementById('fReps').value=last.reps||'';
+    document.getElementById('fSets').value=last.sets||3;
+    document.getElementById('lastWeight').textContent=last.weight>0?`上次 ${last.weight}kg ✓`:'上次 自重';
+    document.getElementById('lastReps').textContent=`上次 ${last.reps}次 ✓`;
+  } else {
+    document.getElementById('fWeight').value='';
+    document.getElementById('fReps').value='';
+    document.getElementById('fSets').value='3';
+    document.getElementById('lastWeight').textContent='首次記錄';
+    document.getElementById('lastReps').textContent='';
+  }
+
+  // PR badge
+  document.getElementById('prBadge').innerHTML=pr?`<span class="pr-badge">🏆 PR ${pr}kg</span>`:'';
+
+  renderPrevLogs(id);
+  renderProgressChart(id);
+}
+
+function renderProgressChart(id){
+  const myLogs=logs.filter(l=>l.eqId===id&&l.weight>0);
+  const chartWrap=document.getElementById('chartWrap');
+  if(myLogs.length<2){chartWrap.style.display='none';return;}
+  chartWrap.style.display='block';
+
+  // group by date, take max weight per day
+  const byDate={};
+  myLogs.forEach(l=>{
+    if(!byDate[l.date]||l.weight>byDate[l.date])byDate[l.date]=l.weight;
+  });
+  const dates=Object.keys(byDate).sort();
+  const weights=dates.map(d=>byDate[d]);
+
+  // destroy old chart
+  const existing=Chart.getChart('progressChart');
+  if(existing)existing.destroy();
+
+  const ctx=document.getElementById('progressChart').getContext('2d');
+  new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:dates.map(d=>d.replace(/\d{4}\//,'')),
+      datasets:[{
+        data:weights,
+        borderColor:'#f5a623',
+        backgroundColor:'rgba(245,166,35,0.08)',
+        pointBackgroundColor:'#f5a623',
+        pointRadius:4,
+        pointHoverRadius:6,
+        tension:0.3,
+        fill:true,
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          callbacks:{
+            label:ctx=>`${ctx.parsed.y}kg`
+          }
+        }
+      },
+      scales:{
+        x:{
+          ticks:{color:'#5a6a7a',font:{size:10}},
+          grid:{color:'rgba(255,255,255,0.04)'}
+        },
+        y:{
+          ticks:{color:'#5a6a7a',font:{size:10},callback:v=>v+'kg'},
+          grid:{color:'rgba(255,255,255,0.04)'}
+        }
+      }
+    }
+  });
+}
+
+function renderPrevLogs(id){
+  const myLogs=logs.filter(l=>l.eqId===id).slice(-8).reverse();
+  document.getElementById('prevLogs').innerHTML=myLogs.length===0
+    ?`<div style="color:var(--muted);font-size:.72rem;text-align:center;padding:8px">還沒有記錄</div>`
+    :myLogs.map(l=>`<div class="prev-row">
+        <span class="prev-l">${l.date} ${l.time}</span>
+        <span class="prev-r">${l.weight>0?l.weight+'kg ':''} ${l.reps}次×${l.sets}組</span>
+        <button class="prev-del" onclick="delLog('${l.id}')">🗑</button>
+      </div>`).join('');
+}
+
+function closeModal(){document.getElementById('overlay').classList.remove('open');currentEq=null;currentAction=null;}
+function closeOverlay(e){if(e.target===document.getElementById('overlay'))closeModal();}
+
+async function saveLog(){
+  if(!currentEq)return;
+  const reps=parseInt(document.getElementById('fReps').value);
+  if(!reps||reps<=0){showToast('⚠️ 請輸入次數');return;}
+  const weight=parseFloat(document.getElementById('fWeight').value)||0;
+  const sets=parseInt(document.getElementById('fSets').value)||1;
+  const useAction=currentAction||currentEq;
+  const eqId=currentAction?currentAction.id:currentEq.id;
+  const name=currentAction?`${currentEq.name}－${currentAction.name}`:currentEq.name;
+  const muscle=currentAction?currentAction.muscle:currentEq.muscle;
+  await pushLog({eqId,name,ico:currentEq.ico||'🏋️',brand:currentEq.brand,muscle,weight,reps,sets});
+  fillLastData(eqId);
+  renderEqGrid();
+  showToast(`✓ ${name} ${reps}次×${sets}組`);
+}
+
+// ── FREE WEIGHT ──
+const FREE_ICONS={dumbbell:'🔵',barbell:'⚫',kettlebell:'🟤'};
+const FREE_LABELS={dumbbell:'啞鈴',barbell:'槓鈴',kettlebell:'壺鈴'};
+function setFreeType(type,el){
+  freeType=type;
+  document.querySelectorAll('.free-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  updateFreeSuggest();
+  // fill last data for recently used name
+  const nameInp=document.getElementById('freeName');
+  if(nameInp.value)fillFreeLastData(nameInp.value);
+}
+function updateFreeSuggest(){
+  const names=[...new Set(logs.filter(l=>l.brand===FREE_LABELS[freeType]).map(l=>l.name))];
+  document.getElementById('freeSuggest').innerHTML=names.map(n=>`<option value="${n}">`).join('');
+}
+function fillFreeLastData(name){
+  const id='free_'+freeType+'_'+name;
+  const last=getLastLog(id);
+  if(last){
+    document.getElementById('freeWeight').value=last.weight>0?last.weight:'';
+    document.getElementById('freeReps').value=last.reps||'';
+    document.getElementById('freeSets').value=last.sets||3;
+    document.getElementById('freeLastWeight').textContent=last.weight>0?`上次 ${last.weight}kg ✓`:'上次 自重';
+    document.getElementById('freeLastReps').textContent=`上次 ${last.reps}次 ✓`;
+  } else {
+    document.getElementById('freeWeight').value='';
+    document.getElementById('freeReps').value='';
+    document.getElementById('freeSets').value='3';
+    document.getElementById('freeLastWeight').textContent='首次記錄';
+    document.getElementById('freeLastReps').textContent='';
+  }
+}
+document.getElementById('freeName').addEventListener('input',function(){fillFreeLastData(this.value.trim());});
+
+async function saveFreeLog(){
+  const name=document.getElementById('freeName').value.trim();
+  if(!name){showToast('⚠️ 請輸入動作名稱');return;}
+  const reps=parseInt(document.getElementById('freeReps').value);
+  if(!reps||reps<=0){showToast('⚠️ 請輸入次數');return;}
+  const weight=parseFloat(document.getElementById('freeWeight').value)||0;
+  const sets=parseInt(document.getElementById('freeSets').value)||1;
+  const eqId='free_'+freeType+'_'+name;
+  await pushLog({eqId,name,ico:FREE_ICONS[freeType],brand:FREE_LABELS[freeType],muscle:FREE_LABELS[freeType],weight,reps,sets});
+  updateFreeSuggest();
+  renderFreeToday();
+  fillFreeLastData(name);
+  showToast(`✓ ${FREE_LABELS[freeType]} ${name} ${reps}次×${sets}組`);
+}
+
+function renderFreeToday(){
+  const today=todayStr();
+  const tl=logs.filter(l=>l.date===today&&['啞鈴','槓鈴','壺鈴'].includes(l.brand));
+  const el=document.getElementById('freeTodayList');
+  if(!tl.length){el.innerHTML=`<div class="empty"><span class="empty-ico">🔵</span>今天還沒有自由重量記錄</div>`;return;}
+  el.innerHTML=[...tl].reverse().map(l=>`<div class="log-item">
+    <div class="li-ico">${l.ico}</div>
+    <div class="li-info"><div class="li-name">${l.name}</div><div class="li-meta">${l.time} · ${l.brand}</div></div>
+    <div class="li-val">${l.weight>0?l.weight+'kg<br>':''}${l.reps}次×${l.sets}組</div>
+    <button class="li-del" onclick="delLog('${l.id}')">🗑</button>
+  </div>`).join('');
+}
+
+// ── PHOTO / AI ──
+function handleSearchPhoto(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=async function(ev){
+    showToast('🔍 AI 辨識照片中...');
+    const b64=ev.target.result.split(',')[1];
+    const mime=file.type||'image/jpeg';
+    await searchByPhoto(b64,mime);
+  };
+  reader.readAsDataURL(file);
+  e.target.value='';
+}
+
+async function searchByPhoto(b64,mime){
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:500,
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:mime,data:b64}},
+          {type:'text',text:'這張圖片是什麼健身器材？只回覆器材的中文名稱，例如：「腿推機」「胸推機」「史密斯機」，不要其他文字。'}
+        ]}]
+      })
+    });
+    const data=await resp.json();
+    const name=data.content?.find(b=>b.type==='text')?.text?.trim()||'';
+    if(name){
+      document.getElementById('searchInp').value=name;
+      filterEq();
+      showToast(`🔍 搜尋：${name}`);
+    }else{showToast('⚠️ 辨識失敗，請試文字搜尋');}
+  }catch(e){showToast('⚠️ 網路錯誤');}
+}
+
+function handleScanPhoto(e){
+  const file=e.target.files[0];if(!file)return;
+  const preview=document.getElementById('scanPreview');
+  preview.src=URL.createObjectURL(file);
+  preview.style.display='block';
+  document.getElementById('aiResult').classList.remove('show');
+  document.getElementById('scanLoading').classList.add('show');
+  const reader=new FileReader();
+  reader.onload=async function(ev){
+    await identifyEquipment(ev.target.result.split(',')[1],file.type||'image/jpeg');
+  };
+  reader.readAsDataURL(file);
+  e.target.value='';
+}
+
+async function identifyEquipment(b64,mime){
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:800,
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:mime,data:b64}},
+          {type:'text',text:`你是健身器材辨識專家。分析圖片中的健身器材（本體、說明貼紙或局部都可辨識）。回傳 JSON（不加 markdown）：
+{"name":"器材中文名稱","brand":"品牌（HOIST ROC-IT/Hammer Strength/Matrix/Smith Machine/不明）","muscle":"胸/背/腿/肩/手臂/核心/有氧","muscles":["肌群1","肌群2"],"icon":"emoji","description":"20字內說明"}`}
+        ]}]
+      })
+    });
+    const data=await resp.json();
+    document.getElementById('scanLoading').classList.remove('show');
+    const text=data.content?.find(b=>b.type==='text')?.text||'';
+    let result;
+    try{result=JSON.parse(text.replace(/```json|```/g,'').trim());}
+    catch(e){showToast('⚠️ 辨識失敗，請再試一次');return;}
+    pendingAi=result;
+    document.getElementById('aiName').textContent=(result.icon||'🏋️')+' '+result.name;
+    document.getElementById('aiMeta').textContent=`品牌：${result.brand}｜${result.description||''}`;
+    document.getElementById('aiMuscles').innerHTML=(result.muscles||[]).map(m=>`<span class="chip">${m}</span>`).join('');
+    document.getElementById('aiResult').classList.add('show');
+  }catch(err){
+    document.getElementById('scanLoading').classList.remove('show');
+    showToast('⚠️ 網路錯誤，請再試一次');
+  }
+}
+
+async function confirmAddEq(){
+  if(!pendingAi)return;
+  const newEq={id:'custom_'+Date.now(),ico:pendingAi.icon||'🏋️',name:pendingAi.name,brand:pendingAi.brand||'自訂',muscle:pendingAi.muscle||'自訂',muscles:pendingAi.muscles||[]};
+  customEq.push(newEq);
+  await apiPost({action:'saveCustomEq',data:newEq});
+  renderCustomEqGrid();renderEqGrid();
+  showToast(`✓ 已加入：${newEq.name}`);
+  resetScan();
+}
+
+function resetScan(){
+  document.getElementById('scanPreview').style.display='none';
+  document.getElementById('aiResult').classList.remove('show');
+  document.getElementById('scanLoading').classList.remove('show');
+  document.getElementById('scanCamera').value='';
+  document.getElementById('scanGallery').value='';
+  pendingAi=null;
+}
+
+// ── PUSH / DEL LOG ──
+async function pushLog(data){
+  const entry={id:String(Date.now()),date:todayStr(),time:timeStr(),...data};
+  logs.push(entry);
+  await apiPost({action:'saveLog',data:entry});
+  renderToday();renderHistory();
+}
+async function delLog(id){
+  logs=logs.filter(l=>l.id!==String(id));
+  await apiPost({action:'deleteLog',id});
+  // refresh whatever is visible
+  const cur=currentEq;
+  if(cur){const aid=currentAction?currentAction.id:cur.id;renderPrevLogs(aid);fillLastData(aid);}
+  renderEqGrid();renderFreeToday();renderToday();renderHistory();
+}
+
+// ── TODAY ══
+// ── PLAN ──
+let todayPlan=[]; // [{section:'背部', items:['滑輪下拉','坐姿划船',...]}]
+
+function showPastePlan(){
+  document.getElementById('pasteBox').style.display='block';
+  document.getElementById('planPasteInp').focus();
+}
+function hidePastePlan(){
+  document.getElementById('pasteBox').style.display='none';
+}
+function clearPlan(){
+  todayPlan=[];
+  savePlan();
+  renderPlanArea();
+}
+function savePlan(){
+  try{localStorage.setItem('wg_plan_'+todayStr(),JSON.stringify(todayPlan));}catch(e){}
+}
+function loadPlan(){
+  try{
+    const r=localStorage.getItem('wg_plan_'+todayStr());
+    if(r)todayPlan=JSON.parse(r);
+  }catch(e){todayPlan=[];}
+}
+
+function parsePlan(){
+  const raw=document.getElementById('planPasteInp').value.trim();
+  if(!raw){showToast('⚠️ 請貼上課表文字');return;}
+  
+  const lines=raw.split('\n').map(l=>l.trim()).filter(l=>l);
+  todayPlan=[];
+  let currentSection=null;
+  
+  for(const line of lines){
+    // skip title line (contains ＋ or 練)
+    if(line.includes('今天練')||line.includes('今日')){continue;}
+    // section header: ends with ：or : or contains 部/式
+    if(line.endsWith('：')||line.endsWith(':')||/[部式肌胸背腿肩臂心氧]/.test(line)&&line.length<=6){
+      currentSection={title:line.replace(/[：:]/g,''),items:[]};
+      todayPlan.push(currentSection);
+      continue;
+    }
+    // bullet or plain item
+    const name=line.replace(/^[-•·＊\*\d\.\s]+/,'').trim();
+    if(!name)continue;
+    if(!currentSection){
+      currentSection={title:'今日訓練',items:[]};
+      todayPlan.push(currentSection);
+    }
+    currentSection.items.push({name,done:false});
+  }
+  
+  if(!todayPlan.length){showToast('⚠️ 解析失敗，請確認格式');return;}
+  savePlan();
+  hidePastePlan();
+  document.getElementById('planPasteInp').value='';
+  renderPlanArea();
+  showToast('✓ 課表已匯入！');
+}
+
+function togglePlanItem(sIdx,iIdx){
+  todayPlan[sIdx].items[iIdx].done=!todayPlan[sIdx].items[iIdx].done;
+  savePlan();
+  renderPlanArea();
+}
+
+function renderPlanArea(){
+  const el=document.getElementById('planArea');
+  if(!todayPlan.length){
+    el.innerHTML=`<div style="text-align:center;padding:12px 0;color:var(--muted);font-size:.78rem">還沒有課表<br>點「貼上課表」從 Cowork 匯入</div>`;
+    return;
+  }
+  const today=todayStr();
+  const doneLogs=new Set(logs.filter(l=>l.date===today).map(l=>l.name));
+  
+  el.innerHTML=todayPlan.map((sec,si)=>`
+    <div class="plan-section">
+      <div class="plan-section-title">${sec.title}</div>
+      ${sec.items.map((item,ii)=>{
+        const logged=doneLogs.has(item.name);
+        const isDone=item.done||logged;
+        const hint=logged?'已記錄':'點擊完成';
+        return`<div class="plan-item${isDone?' done':''}" onclick="togglePlanItem(${si},${ii})">
+          <div class="plan-check${isDone?' done':''}">${isDone?'✓':''}</div>
+          <span class="plan-item-name">${item.name}</span>
+          <span class="plan-item-hint">${logged?'✓ 已記錄':''}</span>
+        </div>`;
+      }).join('')}
+    </div>`).join('');
+  
+  // progress bar
+  const total=todayPlan.reduce((s,sec)=>s+sec.items.length,0);
+  const done=todayPlan.reduce((s,sec)=>s+sec.items.filter(i=>i.done||doneLogs.has(i.name)).length,0);
+  if(total>0){
+    const pct=Math.round(done/total*100);
+    el.innerHTML=`<div style="margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted);margin-bottom:4px">
+        <span>完成進度</span><span style="color:var(--acc)">${done}/${total} (${pct}%)</span>
+      </div>
+      <div style="background:var(--s3);border-radius:4px;height:5px;overflow:hidden">
+        <div style="background:var(--green);width:${pct}%;height:100%;border-radius:4px;transition:width .3s"></div>
+      </div>
+    </div>`+el.innerHTML;
+  }
+}
+
+function renderToday(){
+  const today=todayStr();
+  const tl=logs.filter(l=>l.date===today);
+  document.getElementById('tSets').textContent=tl.reduce((s,l)=>s+l.sets,0);
+  document.getElementById('tKinds').textContent=new Set(tl.map(l=>l.eqId)).size;
+  document.getElementById('tVol').textContent=tl.reduce((s,l)=>s+l.reps*l.sets,0);
+  renderPlanArea();
+
+  const list=document.getElementById('todayList');
+  if(!tl.length){list.innerHTML=`<div class="empty"><span class="empty-ico">🏋️</span>今天還沒有訓練記錄</div>`;return;}
+  list.innerHTML=[...tl].reverse().map(l=>`<div class="log-item">
+    <div class="li-ico">${l.ico}</div>
+    <div class="li-info"><div class="li-name">${l.name}</div><div class="li-meta">${l.time} · ${l.brand}</div></div>
+    <div class="li-val">${l.weight>0?l.weight+'kg<br>':''}${l.reps}次×${l.sets}組</div>
+    <button class="li-del" onclick="delLog('${l.id}')">🗑</button>
+  </div>`).join('');
+}
+
+// ── HISTORY ──
+function renderHistory(){
+  const today=todayStr();
+  const past=logs.filter(l=>l.date!==today);
+  const c=document.getElementById('histContainer');
+  if(!past.length){c.innerHTML=`<div class="empty"><span class="empty-ico">📅</span>還沒有歷史記錄</div>`;return;}
+  const byDate={};
+  past.forEach(l=>{if(!byDate[l.date])byDate[l.date]=[];byDate[l.date].push(l);});
+  c.innerHTML=Object.keys(byDate).sort((a,b)=>b.localeCompare(a)).slice(0,60).map(d=>{
+    const g={};
+    byDate[d].forEach(l=>{if(!g[l.eqId])g[l.eqId]={name:l.name,ico:l.ico,sets:0,reps:0,maxW:0};g[l.eqId].sets+=l.sets;g[l.eqId].reps+=l.reps*l.sets;if(l.weight>g[l.eqId].maxW)g[l.eqId].maxW=l.weight;});
+    const total=Object.values(g).reduce((s,v)=>s+v.sets,0);
+    return`<div class="hist-day">
+      <div class="hist-date">📅 ${d} · 共${total}組</div>
+      ${Object.values(g).map(v=>`<div class="hist-row">
+        <span class="hist-l">${v.ico} ${v.name}</span>
+        <span class="hist-r">${v.maxW>0?v.maxW+'kg ':''} ${v.reps}次 ${v.sets}組</span>
+      </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+// ── TABS ──
+function switchTab(tab){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach((b,i)=>b.classList.toggle('active',['eq','free','scan','today','hist'][i]===tab));
+  document.getElementById('mainScroll').scrollTop=0;
+  if(tab==='today')renderToday();
+  if(tab==='hist')renderHistory();
+  if(tab==='free')renderFreeToday();
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// ── INIT ──
+document.getElementById('hdrDate').textContent=new Date().toLocaleDateString('zh-TW',{month:'long',day:'numeric',weekday:'short'});
+renderMuscleTabs();
+renderEqGrid();
+loadPlan();
+renderPlanArea();
+loadFromSheets();
+</script>
+</body>
+</html>
