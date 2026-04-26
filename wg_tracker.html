@@ -375,6 +375,19 @@ const BUILTIN=[
     {id:'smith_hip_thrust',name:'臀推',muscles:['臀大肌','腿後腱'],muscle:'腿'},
     {id:'smith_lunge',name:'弓箭步',muscles:['股四頭','臀大肌'],muscle:'腿'},
   ]},
+  // 深蹲架（多功能）
+  {id:'hs_rack',ico:'🔴',name:'Hammer 深蹲架',brand:'Hammer Strength',muscle:'多功能',muscles:['多部位'],
+   actions:[
+    {id:'rack_squat',name:'槓鈴深蹲',muscles:['股四頭','臀大肌','腿後腱'],muscle:'腿'},
+    {id:'rack_front_squat',name:'前蹲舉',muscles:['股四頭','核心','上背'],muscle:'腿'},
+    {id:'rack_bench',name:'槓鈴臥推',muscles:['胸大肌','三頭肌','前三角'],muscle:'胸'},
+    {id:'rack_incline_bench',name:'上斜臥推',muscles:['上胸','三頭肌'],muscle:'胸'},
+    {id:'rack_ohp',name:'站姿肩推',muscles:['三角肌','三頭肌'],muscle:'肩'},
+    {id:'rack_row',name:'槓鈴划船',muscles:['背闊肌','中背','菱形肌'],muscle:'背'},
+    {id:'rack_rdl',name:'羅馬尼亞硬舉',muscles:['臀大肌','腿後腱','豎脊肌'],muscle:'腿'},
+    {id:'rack_deadlift',name:'硬舉',muscles:['豎脊肌','臀大肌','腿後腱','背闊肌'],muscle:'背'},
+    {id:'rack_pullup',name:'引體向上',muscles:['背闊肌','二頭肌'],muscle:'背'},
+  ]},
   // 背
   {id:'hs_row',ico:'🔴',name:'單邊坐姿划船',brand:'Hammer Strength',muscle:'背',muscles:['背闊肌','菱形肌','後三角']},
   {id:'hs_pulldown',ico:'🔴',name:'下拉機',brand:'Hammer Strength',muscle:'背',muscles:['背闊肌','二頭肌']},
@@ -385,6 +398,7 @@ const BUILTIN=[
   {id:'fw_trap_deadlift',ico:'⚪',name:'六角槓硬舉',brand:'Free Weight',muscle:'背',muscles:['豎脊肌','臀大肌','腿後腱','股四頭']},
   {id:'fw_pullup',ico:'⚪',name:'引體向上',brand:'Free Weight',muscle:'背',muscles:['背闊肌','二頭肌']},
   {id:'hs_high_row',ico:'🔴',name:'Hammer 高拉划船',brand:'Hammer Strength',muscle:'背',muscles:['背闊肌','中背','後三角','菱形肌']},
+  {id:'mx_g3s22_rear',ico:'🟡',name:'後三角飛鳥 (G3-S22)',brand:'Matrix',muscle:'背',muscles:['後三角肌','菱形肌','上背']},
   // 腿
   {id:'hi_outer_thigh',ico:'🟠',name:'大腿外展機 (W101)',brand:'HOIST ROC-IT',muscle:'腿',muscles:['臀中肌','臀小肌']},
   {id:'hi_inner_thigh',ico:'🟠',name:'大腿內收機',brand:'HOIST ROC-IT',muscle:'腿',muscles:['內收肌群']},
@@ -398,7 +412,6 @@ const BUILTIN=[
   // 肩
   {id:'hs_shoulder',ico:'🔴',name:'肩推機',brand:'Hammer Strength',muscle:'肩',muscles:['三角肌','三頭肌']},
   {id:'hs_lateral',ico:'🔴',name:'側平舉機',brand:'Hammer Strength',muscle:'肩',muscles:['側三角']},
-  {id:'mx_g3s22_rear',ico:'🟡',name:'後三角飛鳥 (G3-S22)',brand:'Matrix',muscle:'肩',muscles:['後三角肌','菱形肌']},
   {id:'fw_ohp',ico:'⚪',name:'站姿肩推',brand:'Free Weight',muscle:'肩',muscles:['三角肌','三頭肌']},
   // 手臂
   {id:'hs_bicep',ico:'🔴',name:'二頭彎舉機',brand:'Hammer Strength',muscle:'手臂',muscles:['肱二頭肌']},
