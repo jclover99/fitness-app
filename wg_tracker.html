@@ -27,8 +27,8 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
 .panel{display:none}
 .panel.active{display:block;animation:fadeIn .18s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-
-
+ 
+ 
 /* PLAN */
 .plan-section{margin-bottom:6px}
 .plan-section-title{font-size:.65rem;color:var(--purple);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;padding:3px 0;border-bottom:1px solid var(--border)}
@@ -39,20 +39,20 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
 .plan-check.done{background:var(--green);border-color:var(--green);color:#000}
 .plan-item-name{flex:1}
 .plan-item-hint{font-size:.65rem;color:var(--muted)}
-
+ 
 /* SEARCH */
 .search-bar{display:flex;gap:8px;margin-bottom:10px}
 .search-inp{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:11px;padding:10px 12px;color:var(--text);font-family:'Noto Sans TC',sans-serif;font-size:.85rem;outline:none;transition:border-color .2s}
 .search-inp:focus{border-color:var(--acc)}
 .cam-btn{background:var(--s2);border:1px solid var(--border);border-radius:11px;padding:10px 13px;cursor:pointer;font-size:1.1rem;position:relative;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .cam-btn input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0}
-
+ 
 /* TABS */
 .mtabs{display:flex;gap:5px;overflow-x:auto;margin-bottom:10px;padding-bottom:2px}
 .mtabs::-webkit-scrollbar{display:none}
 .mtab{flex-shrink:0;background:var(--s2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:.7rem;cursor:pointer;transition:all .15s;white-space:nowrap;color:var(--text)}
 .mtab.active{background:var(--acc);border-color:var(--acc);color:#000;font-weight:700}
-
+ 
 /* EQ CARDS */
 .eq-grid{display:flex;flex-direction:column;gap:7px}
 .eq-card{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:12px 13px;display:flex;align-items:center;gap:11px;cursor:pointer;transition:border-color .15s}
@@ -66,7 +66,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
 .eq-badge{background:var(--acc);color:#000;font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:10px;font-family:'Barlow Condensed',sans-serif}
 .eq-pr{font-size:.6rem;color:var(--green)}
 .eq-arrow{color:var(--muted);font-size:.75rem}
-
+ 
 /* FORMS */
 .sec{font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;margin-top:2px}
 .form-box{background:var(--s2);border-radius:12px;padding:12px;margin-bottom:10px}
@@ -76,20 +76,20 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
 .inp{background:var(--s3);border:1px solid var(--border);border-radius:9px;padding:10px 11px;color:var(--text);font-family:'Noto Sans TC',sans-serif;font-size:.9rem;outline:none;width:100%;transition:border-color .2s}
 .inp:focus{border-color:var(--acc)}
 .inp-last-val{font-size:.65rem;color:var(--acc);margin-top:2px;min-height:14px;transition:color .2s}
-
+ 
 /* BUTTONS */
 .btn{width:100%;padding:12px;border:none;border-radius:11px;font-family:'Noto Sans TC',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;transition:opacity .15s,transform .1s;margin-top:4px}
 .btn:active{transform:scale(.97);opacity:.85}
 .btn-p{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff}
 .btn-g{background:var(--s3);color:var(--muted)}
 .btn-b{background:rgba(74,158,255,.15);border:1px solid rgba(74,158,255,.3);color:var(--blue)}
-
+ 
 /* STATS */
 .stats-row{display:flex;gap:7px;margin-bottom:11px}
 .stat{flex:1;background:var(--s1);border-radius:10px;padding:10px;text-align:center}
 .stat-v{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:700;color:var(--acc);line-height:1}
 .stat-l{font-size:.56rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
-
+ 
 /* LOG LIST */
 .log-list{display:flex;flex-direction:column;gap:6px}
 .log-item{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:9px;animation:fadeIn .2s}
@@ -99,7 +99,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
 .li-meta{font-size:.65rem;color:var(--muted);margin-top:1px}
 .li-val{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;color:var(--acc);text-align:right;flex-shrink:0;line-height:1.4}
 .li-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.82rem;padding:4px;flex-shrink:0}
-
+ 
 /* PREV LOGS */
 .prev-logs{max-height:150px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;margin-top:7px}
 .prev-row{display:flex;justify-content:space-between;align-items:center;background:var(--s2);border-radius:7px;padding:7px 10px;font-size:.75rem}
@@ -107,7 +107,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
 .prev-r{font-family:'Barlow Condensed',sans-serif;font-size:1rem;color:var(--acc)}
 .prev-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.78rem;padding:2px 4px}
 .pr-badge{background:rgba(46,204,113,.15);border:1px solid rgba(46,204,113,.3);color:var(--green);font-size:.6rem;padding:2px 7px;border-radius:10px;margin-left:6px}
-
+ 
 /* HISTORY */
 .hist-day{margin-bottom:14px}
 .hist-date{font-size:.63rem;color:var(--acc);letter-spacing:2px;text-transform:uppercase;padding-bottom:5px;border-bottom:1px solid var(--border);margin-bottom:7px}
@@ -115,7 +115,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
 .hist-row:last-child{border:none}
 .hist-l{color:var(--muted);display:flex;align-items:center;gap:6px}
 .hist-r{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;color:var(--acc2)}
-
+ 
 /* OVERLAY / MODAL */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.87);z-index:500;display:none;align-items:flex-end}
 .overlay.open{display:flex}
@@ -127,7 +127,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
 .modal-sub{font-size:.65rem;margin-bottom:4px}
 .chips{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
 .chip{background:rgba(74,158,255,.12);border:1px solid rgba(74,158,255,.25);color:var(--blue);font-size:.64rem;padding:3px 8px;border-radius:20px}
-
+ 
 /* ACTION SELECTOR (multi-action equipment) */
 .action-sel{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
 .action-opt{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:10px 13px;cursor:pointer;transition:border-color .15s;display:flex;align-items:center;justify-content:space-between}
@@ -136,12 +136,12 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
 .action-opt-name{font-size:.85rem;font-weight:500}
 .action-opt-muscles{font-size:.65rem;color:var(--muted);margin-top:2px}
 .action-opt-pr{font-size:.65rem;color:var(--green)}
-
+ 
 /* FREE ENTRY (dumbbell/barbell/kettlebell) */
 .free-tabs{display:flex;gap:6px;margin-bottom:12px}
 .free-tab{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:9px;text-align:center;cursor:pointer;font-size:.78rem;transition:all .15s}
 .free-tab.active{background:var(--acc);border-color:var(--acc);color:#000;font-weight:700}
-
+ 
 /* SCAN */
 .scan-options{display:flex;gap:8px;margin-bottom:12px}
 .scan-opt{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:16px 10px;text-align:center;cursor:pointer;position:relative;transition:border-color .15s}
@@ -159,7 +159,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
 .loading.show{display:flex}
 .spinner{width:28px;height:28px;border:3px solid var(--s3);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-
+ 
 /* PLAN */
 .plan-day{margin-bottom:14px}
 .plan-day-hdr{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;color:var(--acc);letter-spacing:1px;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between}
@@ -168,7 +168,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
 .plan-check{width:20px;height:20px;border-radius:50%;border:1px solid var(--border);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.7rem}
 .plan-check.done{background:var(--green);border-color:var(--green);color:#000}
 .plan-add{background:none;border:1px dashed var(--border);border-radius:9px;padding:9px;width:100%;color:var(--muted);font-size:.78rem;cursor:pointer;margin-top:4px}
-
+ 
 /* TOAST */
 .toast{position:fixed;bottom:66px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--green);color:#000;font-size:.76rem;font-weight:700;padding:8px 15px;border-radius:20px;opacity:0;transition:all .25s;z-index:999;white-space:nowrap;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -178,7 +178,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 </head>
 <body>
-
+ 
 <div class="hdr">
   <div><div class="logo">💪 WG TRACKER</div></div>
   <div class="hdr-r">
@@ -186,9 +186,9 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
     <div class="sync" id="syncDot"></div>
   </div>
 </div>
-
+ 
 <div class="scroll" id="mainScroll">
-
+ 
   <!-- ═══ 器材 ═══ -->
   <div class="panel active" id="panel-eq">
     <div class="search-bar">
@@ -198,7 +198,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
     <div class="sec" id="eqCount"></div>
     <div class="eq-grid" id="eqGrid"></div>
   </div>
-
+ 
   <!-- ═══ 自由重量 ═══ -->
   <div class="panel" id="panel-free">
     <div class="free-tabs">
@@ -231,7 +231,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
     <div class="sec">今日記錄</div>
     <div class="log-list" id="freeTodayList"></div>
   </div>
-
+ 
   <!-- ═══ 新增器材 ═══ -->
   <div class="panel" id="panel-scan">
     <div class="sec">新增器材</div>
@@ -248,14 +248,14 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
       <div class="sec" style="margin:0">貼上 Claude 輸出的文字</div>
     </div>
-    <textarea id="eqPasteInp" style="width:100%;background:var(--s2);border:1px solid var(--border);border-radius:11px;padding:11px;color:var(--text);font-family:Noto Sans TC,sans-serif;font-size:.82rem;height:150px;outline:none;resize:none;margin-bottom:8px;transition:border-color .2s" 
-      placeholder="貼上格式如下：&#10;&#10;器材名稱：腹部訓練機 (VS-S53P)&#10;品牌：Matrix&#10;肌群分類：核心&#10;訓練肌群：腹直肌、腸骨肌、軀幹屈曲&#10;圖示：🟡" 
+    <textarea id="eqPasteInp" style="width:100%;background:var(--s2);border:1px solid var(--border);border-radius:11px;padding:11px;color:var(--text);font-family:Noto Sans TC,sans-serif;font-size:.82rem;height:180px;outline:none;resize:none;margin-bottom:8px;transition:border-color .2s" 
+      placeholder="【一般器材】&#10;器材名稱：腹部訓練機&#10;品牌：Matrix&#10;肌群分類：核心&#10;訓練肌群：腹直肌、腸骨肌&#10;圖示：🟡&#10;&#10;【多動作器材，可加動作1〜動作10】&#10;器材名稱：V型蹲舉訓練機&#10;品牌：Hammer Strength&#10;肌群分類：腿&#10;訓練肌群：股四頭肌、臀大肌、腿後腱&#10;圖示：🔴&#10;動作1：股四頭模式&#10;動作1肌群：股四頭肌、臀大肌&#10;動作1分類：腿&#10;動作2：臀肌模式&#10;動作2肌群：臀大肌、腿後腱&#10;動作2分類：腿" 
       onfocus="this.style.borderColor='var(--acc)'" onblur="this.style.borderColor='var(--border)'"></textarea>
     <button class="btn btn-p" onclick="parseAndAddEq()" style="margin-bottom:4px">＋ 加入器材清單</button>
     <div class="sec" style="margin-top:14px">我的自訂器材 <span id="customEqCount" style="color:var(--acc)"></span></div>
     <div class="eq-grid" id="customEqGrid"></div>
   </div>
-
+ 
   <!-- ═══ 今日 ═══ -->
   <div class="panel" id="panel-today">
     <div class="stats-row">
@@ -283,14 +283,14 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
     <div class="sec" style="margin-top:8px">訓練記錄</div>
     <div class="log-list" id="todayList"></div>
   </div>
-
+ 
   <!-- ═══ 歷史 ═══ -->
   <div class="panel" id="panel-hist">
     <div id="histContainer"></div>
   </div>
-
+ 
 </div>
-
+ 
 <div class="nav">
   <button class="nav-btn active" onclick="switchTab('eq')"><span class="ico">🏋️</span>器材</button>
   <button class="nav-btn" onclick="switchTab('free')"><span class="ico">🔵</span>自由重量</button>
@@ -298,7 +298,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
   <button class="nav-btn" onclick="switchTab('today')"><span class="ico">📋</span>今日</button>
   <button class="nav-btn" onclick="switchTab('hist')"><span class="ico">📅</span>歷史</button>
 </div>
-
+ 
 <!-- LOG MODAL -->
 <div class="overlay" id="overlay" onclick="closeOverlay(event)">
   <div class="modal" id="modal">
@@ -349,12 +349,12 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-seri
     <button class="btn btn-g" onclick="closeModal()" style="margin-top:10px">關閉</button>
   </div>
 </div>
-
+ 
 <div class="toast" id="toast"></div>
-
+ 
 <script>
 const API='https://script.google.com/macros/s/AKfycbwDDNjws3JBqc3yzlqA5af3DxPWhVV9kn5F7KpsUHnZP14nupKh-bDiPLS4v0hLn7yW/exec';
-
+ 
 // ══ EQUIPMENT DATABASE ══
 const BUILTIN=[
   // 胸
@@ -429,12 +429,12 @@ const BUILTIN=[
   {id:'mx_stairmaster',ico:'🟢',name:'登階機 StairMaster',brand:'Matrix',muscle:'有氧',muscles:['臀腿心肺']},
   {id:'mx_row',ico:'🟢',name:'划船機',brand:'Matrix',muscle:'有氧',muscles:['全身心肺']},
 ];
-
+ 
 const BRAND_COLOR={'Hammer Strength':'#e8341a','HOIST ROC-IT':'#f5a623','Matrix':'#4a9eff','Free Weight':'#888','Smith Machine':'#bbb','自訂':'#a855f7'};
 const MUSCLES=['全部','胸','背','腿','肩','手臂','核心','有氧','多功能','自訂'];
-
+ 
 let logs=[], customEq=[], activeMusc='全部', currentEq=null, currentAction=null, searchQ='', freeType='dumbbell';
-
+ 
 // ── SYNC ──
 function setSyncDot(s){document.getElementById('syncDot').className='sync'+(s?' '+s:'');}
 async function apiPost(body){
@@ -467,12 +467,28 @@ async function loadFromSheets(){
     }
     return {id:String(r[0]),date:dateStr,time:timeStr,eqId:r[3],name:r[4],ico:r[5]||'🏋️',brand:r[6],muscle:r[7],weight:parseFloat(r[8])||0,reps:parseInt(r[9])||0,sets:parseInt(r[10])||1};
   });
-  customEq=(er||[]).filter(r=>r[0]).map(r=>({id:r[0],name:r[1],brand:r[2],muscle:r[3],muscles:JSON.parse(r[4]||'[]'),ico:r[5]||'🏋️'}));
+  customEq=(er||[]).filter(r=>r[0]).map(r=>{
+    // muscles column may be either a plain JSON array (legacy) or
+    // {_muscles:[...],_actions:[...]} (multi-action equipment)
+    let muscles=[],actions=null;
+    try{
+      const parsed=JSON.parse(r[4]||'[]');
+      if(Array.isArray(parsed)){
+        muscles=parsed;
+      }else if(parsed&&parsed._actions){
+        muscles=parsed._muscles||[];
+        actions=parsed._actions;
+      }
+    }catch(e){muscles=[];}
+    const eq={id:r[0],name:r[1],brand:r[2],muscle:r[3],muscles,ico:r[5]||'🏋️'};
+    if(actions)eq.actions=actions;
+    return eq;
+  });
   renderAll();
 }
-
+ 
 function renderAll(){renderMuscleTabs();renderEqGrid();renderCustomEqGrid();renderToday();renderHistory();renderFreeToday();updateFreeSuggest();}
-
+ 
 // ── HELPERS ──
 function todayStr(){
   const d=new Date();
@@ -488,7 +504,7 @@ function timeStr(){
   return `${h}:${m}`;
 }
 function allEq(){return[...BUILTIN,...customEq];}
-
+ 
 // get PR for an eqId or actionId
 function getPR(id){
   const myLogs=logs.filter(l=>l.eqId===id&&l.weight>0);
@@ -500,7 +516,7 @@ function getLastLog(id){
   const myLogs=logs.filter(l=>l.eqId===id);
   return myLogs.length?myLogs[myLogs.length-1]:null;
 }
-
+ 
 // ── MUSCLE TABS ──
 function renderMuscleTabs(){
   document.getElementById('muscleTabs').innerHTML=MUSCLES.map(m=>
@@ -509,7 +525,7 @@ function renderMuscleTabs(){
 }
 function setMusc(m){activeMusc=m;searchQ='';document.getElementById('searchInp').value='';renderMuscleTabs();renderEqGrid();}
 function filterEq(){searchQ=document.getElementById('searchInp').value.trim();activeMusc='全部';renderMuscleTabs();renderEqGrid();}
-
+ 
 // ── EQ GRID ──
 function renderEqGrid(){
   let list=allEq();
@@ -543,7 +559,7 @@ function renderEqGrid(){
       </div>`;
     }).join('');
 }
-
+ 
 // ── CUSTOM EQ ──
 function renderCustomEqGrid(){
   const el=document.getElementById('customEqGrid');
@@ -571,7 +587,7 @@ async function delCustomEq(id){
   await apiPost({action:'deleteCustomEq',id});
   renderCustomEqGrid();renderEqGrid();
 }
-
+ 
 // ── MODAL ──
 function openModal(eqId){
   currentEq=allEq().find(e=>e.id===eqId);
@@ -581,7 +597,7 @@ function openModal(eqId){
   document.getElementById('mBrand').style.color=BRAND_COLOR[currentEq.brand]||'#888';
   document.getElementById('mTitle').textContent=currentEq.name;
   document.getElementById('mMuscles').innerHTML=currentEq.muscles.map(m=>`<span class="chip">${m}</span>`).join('');
-
+ 
   // multi-action?
   const asel=document.getElementById('actionSel');
   const alist=document.getElementById('actionList');
@@ -609,7 +625,7 @@ function openModal(eqId){
   }
   document.getElementById('overlay').classList.add('open');
 }
-
+ 
 function selectAction(actionId){
   const action=currentEq.actions.find(a=>a.id===actionId);
   if(!action)return;
@@ -620,11 +636,11 @@ function selectAction(actionId){
   document.getElementById('logFormWrap').style.display='block';
   fillLastData(actionId);
 }
-
+ 
 function fillLastData(id){
   const last=getLastLog(id);
   const pr=getPR(id);
-
+ 
   // AUTO-FILL last values
   if(last){
     document.getElementById('fWeight').value=last.weight>0?last.weight:'';
@@ -639,20 +655,20 @@ function fillLastData(id){
     document.getElementById('lastWeight').textContent='首次記錄';
     document.getElementById('lastReps').textContent='';
   }
-
+ 
   // PR badge
   document.getElementById('prBadge').innerHTML=pr?`<span class="pr-badge">🏆 PR ${pr}kg</span>`:'';
-
+ 
   renderPrevLogs(id);
   renderProgressChart(id);
 }
-
+ 
 function renderProgressChart(id){
   const myLogs=logs.filter(l=>l.eqId===id&&l.weight>0);
   const chartWrap=document.getElementById('chartWrap');
   if(myLogs.length<2){chartWrap.style.display='none';return;}
   chartWrap.style.display='block';
-
+ 
   // group by date, take max weight per day
   const byDate={};
   myLogs.forEach(l=>{
@@ -660,11 +676,11 @@ function renderProgressChart(id){
   });
   const dates=Object.keys(byDate).sort();
   const weights=dates.map(d=>byDate[d]);
-
+ 
   // destroy old chart
   const existing=Chart.getChart('progressChart');
   if(existing)existing.destroy();
-
+ 
   const ctx=document.getElementById('progressChart').getContext('2d');
   new Chart(ctx,{
     type:'line',
@@ -705,7 +721,7 @@ function renderProgressChart(id){
     }
   });
 }
-
+ 
 function renderPrevLogs(id){
   const myLogs=logs.filter(l=>l.eqId===id).slice(-8).reverse();
   document.getElementById('prevLogs').innerHTML=myLogs.length===0
@@ -716,10 +732,10 @@ function renderPrevLogs(id){
         <button class="prev-del" onclick="delLog('${l.id}')">🗑</button>
       </div>`).join('');
 }
-
+ 
 function closeModal(){document.getElementById('overlay').classList.remove('open');currentEq=null;currentAction=null;}
 function closeOverlay(e){if(e.target===document.getElementById('overlay'))closeModal();}
-
+ 
 async function saveLog(){
   if(!currentEq)return;
   const reps=parseInt(document.getElementById('fReps').value);
@@ -735,7 +751,7 @@ async function saveLog(){
   renderEqGrid();
   showToast(`✓ ${name} ${reps}次×${sets}組`);
 }
-
+ 
 // ── FREE WEIGHT ──
 const FREE_ICONS={dumbbell:'🔵',barbell:'⚫',kettlebell:'🟤'};
 const FREE_LABELS={dumbbell:'啞鈴',barbell:'槓鈴',kettlebell:'壺鈴'};
@@ -770,7 +786,7 @@ function fillFreeLastData(name){
   }
 }
 document.getElementById('freeName').addEventListener('input',function(){fillFreeLastData(this.value.trim());});
-
+ 
 async function saveFreeLog(){
   const name=document.getElementById('freeName').value.trim();
   if(!name){showToast('⚠️ 請輸入動作名稱');return;}
@@ -785,7 +801,7 @@ async function saveFreeLog(){
   fillFreeLastData(name);
   showToast(`✓ ${FREE_LABELS[freeType]} ${name} ${reps}次×${sets}組`);
 }
-
+ 
 function renderFreeToday(){
   const today=todayStr();
   const tl=logs.filter(l=>l.date===today&&['啞鈴','槓鈴','壺鈴'].includes(l.brand));
@@ -798,35 +814,73 @@ function renderFreeToday(){
     <button class="li-del" onclick="delLog('${l.id}')">🗑</button>
   </div>`).join('');
 }
-
+ 
 // ── 新增器材（貼上解析）──
 async function parseAndAddEq(){
   const raw=document.getElementById('eqPasteInp').value.trim();
   if(!raw){showToast('⚠️ 請貼上 Claude 輸出的文字');return;}
-
+ 
   const lines=raw.split('\n').map(l=>l.trim()).filter(l=>l);
+  // grab a single-key value from the header lines
   const get=(key)=>{
     const line=lines.find(l=>l.startsWith(key));
     return line?line.replace(key,'').trim():'';
   };
-
+ 
   const name=get('器材名稱：');
   const brand=get('品牌：');
   const muscle=get('肌群分類：');
   const musclesRaw=get('訓練肌群：');
   const ico=get('圖示：')||'🏋️';
   const muscles=musclesRaw?musclesRaw.split(/[、,，]/).map(m=>m.trim()).filter(m=>m):[];
-
+ 
   if(!name){showToast('⚠️ 找不到器材名稱，請確認格式');return;}
-
-  const newEq={id:'custom_'+Date.now(),ico,name,brand:brand||'自訂',muscle:muscle||'自訂',muscles};
+ 
+  // ── Multi-action parsing ──
+  // Format:
+  //   動作1：股四頭模式
+  //   動作1肌群：股四頭肌、臀大肌
+  //   動作1分類：腿
+  //   動作2：臀肌模式
+  //   動作2肌群：臀大肌、腿後腱
+  //   動作2分類：腿
+  const actions=[];
+  for(let i=1;i<=10;i++){
+    const aName=get(`動作${i}：`);
+    if(!aName)break;
+    const aMuscRaw=get(`動作${i}肌群：`);
+    const aMuscle=get(`動作${i}分類：`)||muscle||'自訂';
+    const aMuscles=aMuscRaw?aMuscRaw.split(/[、,，]/).map(m=>m.trim()).filter(m=>m):[];
+    actions.push({
+      id:'custom_'+Date.now()+'_a'+i,
+      name:aName,
+      muscle:aMuscle,
+      muscles:aMuscles.length?aMuscles:muscles
+    });
+  }
+ 
+  const newEq={
+    id:'custom_'+Date.now(),
+    ico,
+    name,
+    brand:brand||'自訂',
+    muscle:muscle||'自訂',
+    muscles
+  };
+  if(actions.length)newEq.actions=actions;
+ 
   customEq.push(newEq);
-  await apiPost({action:'saveCustomEq',data:newEq});
+  // Serialize actions into the muscles field so it round-trips through the Sheets backend
+  // unchanged (backend stores muscles as JSON string in column 5).
+  const muscleField=actions.length
+    ?JSON.stringify({_muscles:muscles,_actions:actions})
+    :JSON.stringify(muscles);
+  await apiPost({action:'saveCustomEq',data:{...newEq,muscles:muscleField}});
   renderCustomEqGrid();renderEqGrid();
   document.getElementById('eqPasteInp').value='';
-  showToast(`✓ 已加入：${name}`);
+  showToast(actions.length?`✓ 已加入：${name}（${actions.length} 個動作）`:`✓ 已加入：${name}`);
 }
-
+ 
 // ── PUSH / DEL LOG ──
 async function pushLog(data){
   const entry={id:String(Date.now()),date:todayStr(),time:timeStr(),...data};
@@ -842,11 +896,11 @@ async function delLog(id){
   if(cur){const aid=currentAction?currentAction.id:cur.id;renderPrevLogs(aid);fillLastData(aid);}
   renderEqGrid();renderFreeToday();renderToday();renderHistory();
 }
-
+ 
 // ── TODAY ══
 // ── PLAN ──
 let todayPlan=[]; // [{section:'背部', items:['滑輪下拉','坐姿划船',...]}]
-
+ 
 function showPastePlan(){
   document.getElementById('pasteBox').style.display='block';
   document.getElementById('planPasteInp').focus();
@@ -868,7 +922,7 @@ function loadPlan(){
     if(r)todayPlan=JSON.parse(r);
   }catch(e){todayPlan=[];}
 }
-
+ 
 function parsePlan(){
   const raw=document.getElementById('planPasteInp').value.trim();
   if(!raw){showToast('⚠️ 請貼上課表文字');return;}
@@ -903,13 +957,13 @@ function parsePlan(){
   renderPlanArea();
   showToast('✓ 課表已匯入！');
 }
-
+ 
 function togglePlanItem(sIdx,iIdx){
   todayPlan[sIdx].items[iIdx].done=!todayPlan[sIdx].items[iIdx].done;
   savePlan();
   renderPlanArea();
 }
-
+ 
 function renderPlanArea(){
   const el=document.getElementById('planArea');
   if(!todayPlan.length){
@@ -949,7 +1003,7 @@ function renderPlanArea(){
     </div>`+el.innerHTML;
   }
 }
-
+ 
 function renderToday(){
   const today=todayStr();
   const tl=logs.filter(l=>l.date===today);
@@ -957,7 +1011,7 @@ function renderToday(){
   document.getElementById('tKinds').textContent=new Set(tl.map(l=>l.eqId)).size;
   document.getElementById('tVol').textContent=tl.reduce((s,l)=>s+l.reps*l.sets,0);
   renderPlanArea();
-
+ 
   const list=document.getElementById('todayList');
   if(!tl.length){list.innerHTML=`<div class="empty"><span class="empty-ico">🏋️</span>今天還沒有訓練記錄</div>`;return;}
   list.innerHTML=[...tl].reverse().map(l=>`<div class="log-item">
@@ -967,7 +1021,7 @@ function renderToday(){
     <button class="li-del" onclick="delLog('${l.id}')">🗑</button>
   </div>`).join('');
 }
-
+ 
 // ── HISTORY ──
 function renderHistory(){
   const today=todayStr();
@@ -989,7 +1043,7 @@ function renderHistory(){
     </div>`;
   }).join('');
 }
-
+ 
 // ── TABS ──
 function switchTab(tab){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
@@ -1000,13 +1054,13 @@ function switchTab(tab){
   if(tab==='hist')renderHistory();
   if(tab==='free')renderFreeToday();
 }
-
+ 
 function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2200);
 }
-
+ 
 // ── INIT ──
 document.getElementById('hdrDate').textContent=new Date().toLocaleDateString('zh-TW',{month:'long',day:'numeric',weekday:'short'});
 renderMuscleTabs();
